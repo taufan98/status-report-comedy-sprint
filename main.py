@@ -11,12 +11,18 @@ LINE = (
 
 # The gate requires 1-200 characters of non-whitespace UTF-8 text,
 # and the entry must stand alone as a single sentence on a single line.
-if not 1 <= len(LINE.strip()) <= 200:
-    raise SystemExit(f"entry line must be 1-200 characters, got {len(LINE)}")
-if "\n" in LINE.strip() or "\r" in LINE:
-    raise SystemExit("entry line must be a single line")
-if LINE.count(".") != 1 or not LINE.endswith("."):
-    raise SystemExit("entry line must be exactly one sentence")
+def validate(line: str) -> str:
+    text = line.strip()
+    if not 1 <= len(text) <= 200:
+        raise SystemExit(f"entry line must be 1-200 characters, got {len(text)}")
+    if "\n" in text or "\r" in text:
+        raise SystemExit("entry line must be a single line")
+    if text.count(".") != 1 or not text.endswith("."):
+        raise SystemExit("entry line must be exactly one sentence")
+    return text
+
+
+LINE = validate(LINE)
 
 out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
 out_dir.mkdir(parents=True, exist_ok=True)
